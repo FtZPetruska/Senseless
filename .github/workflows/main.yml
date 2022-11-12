@@ -60,10 +60,10 @@ jobs:
             -DCMAKE_BUILD_TYPE="${{ matrix.build_type }}" \
             -DCMAKE_C_COMPILER="$(brew --prefix gcc)/bin/gcc-12" \
             -DCMAKE_CXX_COMPILER="$(brew --prefix gcc)/bin/g++-12" \
-            -DMYPROJECT_ENABLE_CCACHE=ON \
-            -DMYPROJECT_ENABLE_IWYU=ON \
-            -DMYPROJECT_ENABLE_CLANG_FORMAT=ON \
-            -DMYPROJECT_ENABLE_TESTS=ON
+            -DSL_ENABLE_CCACHE=ON \
+            -DSL_ENABLE_IWYU=ON \
+            -DSL_ENABLE_CLANG_FORMAT=ON \
+            -DSL_ENABLE_TESTS=ON
 
       - name: Configure with LLVM
         if: matrix.compiler == 'llvm'
@@ -72,11 +72,11 @@ jobs:
             -DCMAKE_BUILD_TYPE="${{ matrix.build_type }}" \
             -DCMAKE_C_COMPILER="$(brew --prefix llvm)/bin/clang" \
             -DCMAKE_CXX_COMPILER="$(brew --prefix llvm)/bin/clang++" \
-            -DMYPROJECT_ENABLE_CCACHE=ON \
-            -DMYPROJECT_ENABLE_IWYU=ON \
-            -DMYPROJECT_ENABLE_CLANG_TIDY=ON \
-            -DMYPROJECT_ENABLE_CLANG_FORMAT=ON \
-            -DMYPROJECT_ENABLE_TESTS=ON
+            -DSL_ENABLE_CCACHE=ON \
+            -DSL_ENABLE_IWYU=ON \
+            -DSL_ENABLE_CLANG_TIDY=ON \
+            -DSL_ENABLE_CLANG_FORMAT=ON \
+            -DSL_ENABLE_TESTS=ON
 
       - name: Configure with Apple Clang
         if: matrix.compiler == 'apple-clang'
@@ -85,11 +85,11 @@ jobs:
             -DCMAKE_BUILD_TYPE="${{ matrix.build_type }}" \
             -DCMAKE_C_COMPILER="/usr/bin/clang" \
             -DCMAKE_CXX_COMPILER="/usr/bin/clang++" \
-            -DMYPROJECT_ENABLE_CCACHE=ON \
-            -DMYPROJECT_ENABLE_IWYU=ON \
-            -DMYPROJECT_ENABLE_CLANG_TIDY=ON \
-            -DMYPROJECT_ENABLE_CLANG_FORMAT=ON \
-            -DMYPROJECT_ENABLE_TESTS=ON
+            -DSL_ENABLE_CCACHE=ON \
+            -DSL_ENABLE_IWYU=ON \
+            -DSL_ENABLE_CLANG_TIDY=ON \
+            -DSL_ENABLE_CLANG_FORMAT=ON \
+            -DSL_ENABLE_TESTS=ON
 
       - name: Build project
         run: cmake --build build --verbose
@@ -128,9 +128,9 @@ jobs:
             -T ${{ matrix.toolchain }} `
             -A ${{ matrix.architecture }} `
             -DCMAKE_BUILD_TYPE="${{ matrix.build_type }}" `
-            -DMYPROJECT_ENABLE_CLANG_TIDY=ON `
-            -DMYPROJECT_ENABLE_CLANG_FORMAT=OFF `
-            -DMYPROJECT_ENABLE_TESTS=ON
+            -DSL_ENABLE_CLANG_TIDY=ON `
+            -DSL_ENABLE_CLANG_FORMAT=OFF `
+            -DSL_ENABLE_TESTS=ON
 
       - name: Build project
         run: cmake --build build --verbose

@@ -80,10 +80,10 @@ function(set_available_warnings)
     check_cxx_compiler_flag("-Werror" HAVE_WARNINGS_AS_ERROR)
   endif()
   if(HAVE_WARNINGS_AS_ERROR)
-    option(MYPROJECT_ENABLE_WARNINGS_AS_ERROR "Treat compiler warnings as errors" ON)
+    option(SL_ENABLE_WARNINGS_AS_ERROR "Treat compiler warnings as errors" ON)
   endif()
 
-  if(MYPROJECT_ENABLE_WARNINGS_AS_ERROR)
+  if(SL_ENABLE_WARNINGS_AS_ERROR)
     if(MSVC)
       list(APPEND VALID_CXX_WARNINGS "/WX")
     else()
@@ -95,15 +95,15 @@ function(set_available_warnings)
   set(VALID_C_WARNINGS ${VALID_CXX_WARNINGS})
   list(REMOVE_ITEM VALID_C_WARNINGS ${NON_C_WARNINGS})
 
-  set(MYPROJECT_C_WARNINGS
+  set(SL_C_WARNINGS
       ${VALID_C_WARNINGS}
       CACHE INTERNAL "Available C warnings")
-  set(MYPROJECT_CXX_WARNINGS
+  set(SL_CXX_WARNINGS
       ${VALID_CXX_WARNINGS}
       CACHE INTERNAL "Available C++ warnings")
 endfunction(set_available_warnings)
 
 function(set_target_warnings _TARGET)
-  target_compile_options(${_TARGET} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:${MYPROJECT_CXX_WARNINGS}>
-                                           $<$<COMPILE_LANGUAGE:C>:${MYPROJECT_C_WARNINGS}>)
+  target_compile_options(${_TARGET} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:${SL_CXX_WARNINGS}>
+                                           $<$<COMPILE_LANGUAGE:C>:${SL_C_WARNINGS}>)
 endfunction(set_target_warnings)

@@ -1,5 +1,5 @@
 {
-  "name": "myproject",
+  "name": "senseless",
   "version-string": "0.1.0",
   "dependencies": ["catch2", "spdlog"]
 }
