@@ -1,0 +1,140 @@
+name: Build and test
+
+on: [push, pull_request]
+
+jobs:
+  unix:
+    name: "${{ matrix.runner}} -- ${{ matrix.compiler }}/${{ matrix.build_type }}"
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - ubuntu-latest
+          - macos-latest
+        build_type:
+          - Debug
+          - Release
+        compiler:
+          - gcc
+          - llvm
+          - apple-clang
+
+        exclude:
+          - runner: ubuntu-latest
+            compiler: apple-clang
+          - runner: macos-latest
+            compiler: gcc
+
+    steps:
+      - name: Set VCPKG_ROOT
+        run: echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
+
+      - name: Checkout project
+        uses: actions/checkout@v3
+
+      - name: Setup brew on Linux
+        if: matrix.runner == 'ubuntu-latest'
+        run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          echo $PATH > $GITHUB_PATH
+          echo "$(brew --prefix binutils)/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: |
+          brew update
+          brew install cmake \
+                       ninja \
+                       gcc \
+                       binutils \
+                       llvm \
+                       clang-format \
+                       iwyu \
+                       ccache
+          echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
+
+      - name: Configure with GCC
+        if: matrix.compiler == 'gcc'
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE="${{ matrix.build_type }}" \
+            -DCMAKE_C_COMPILER="$(brew --prefix gcc)/bin/gcc-12" \
+            -DCMAKE_CXX_COMPILER="$(brew --prefix gcc)/bin/g++-12" \
+            -DMYPROJECT_ENABLE_CCACHE=ON \
+            -DMYPROJECT_ENABLE_IWYU=ON \
+            -DMYPROJECT_ENABLE_CLANG_FORMAT=ON \
+            -DMYPROJECT_ENABLE_TESTS=ON
+
+      - name: Configure with LLVM
+        if: matrix.compiler == 'llvm'
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE="${{ matrix.build_type }}" \
+            -DCMAKE_C_COMPILER="$(brew --prefix llvm)/bin/clang" \
+            -DCMAKE_CXX_COMPILER="$(brew --prefix llvm)/bin/clang++" \
+            -DMYPROJECT_ENABLE_CCACHE=ON \
+            -DMYPROJECT_ENABLE_IWYU=ON \
+            -DMYPROJECT_ENABLE_CLANG_TIDY=ON \
+            -DMYPROJECT_ENABLE_CLANG_FORMAT=ON \
+            -DMYPROJECT_ENABLE_TESTS=ON
+
+      - name: Configure with Apple Clang
+        if: matrix.compiler == 'apple-clang'
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE="${{ matrix.build_type }}" \
+            -DCMAKE_C_COMPILER="/usr/bin/clang" \
+            -DCMAKE_CXX_COMPILER="/usr/bin/clang++" \
+            -DMYPROJECT_ENABLE_CCACHE=ON \
+            -DMYPROJECT_ENABLE_IWYU=ON \
+            -DMYPROJECT_ENABLE_CLANG_TIDY=ON \
+            -DMYPROJECT_ENABLE_CLANG_FORMAT=ON \
+            -DMYPROJECT_ENABLE_TESTS=ON
+
+      - name: Build project
+        run: cmake --build build --verbose
+
+      - name: Run tests
+        run: ctest
+        working-directory: build
+
+  windows:
+    name: "Windows -- ${{ matrix.toolchain }}/${{ matrix.build_type }} (${{ matrix.architecture }})"
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        toolchain:
+          - v143
+          - ClangCL
+        build_type:
+          - Debug
+          - Release
+        architecture:
+          - x64
+          - Win32
+
+    steps:
+      - name: Set VCPKG_ROOT
+        shell: bash
+        run: echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> $GITHUB_ENV
+
+      - name: Checkout project
+        uses: actions/checkout@v3
+
+      - name: Configure project
+        run: |
+          cmake -S . -B build `
+            -T ${{ matrix.toolchain }} `
+            -A ${{ matrix.architecture }} `
+            -DCMAKE_BUILD_TYPE="${{ matrix.build_type }}" `
+            -DMYPROJECT_ENABLE_CLANG_TIDY=ON `
+            -DMYPROJECT_ENABLE_CLANG_FORMAT=OFF `
+            -DMYPROJECT_ENABLE_TESTS=ON
+
+      - name: Build project
+        run: cmake --build build --verbose
+
+      - name: Run tests
+        run: ctest
+        working-directory: build
