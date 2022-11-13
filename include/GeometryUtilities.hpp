@@ -5,9 +5,13 @@
 namespace GameLib {
 
 /**
- * @brief Simple 2D point
+ * @brief Simple 2D point in a cartesian plane
+ *
+ * @Note The Y axis is inverted (increases by going down)
  */
 struct Point {
+  bool operator==(const Point &other) const;
+
   int x; /**< Horizontal coordinate */
   int y; /**< Vertical coordinate */
 };
@@ -16,6 +20,10 @@ struct Point {
  * @brief Simple 2D cartesian Vector
  */
 struct Vec2 {
+  Vec2 operator+(const Vec2 &other) const;
+  Vec2 operator-(const Vec2 &other) const;
+  bool operator==(const Vec2 &other) const;
+
   double dx; /**< Displacement on the x axis */
   double dy; /**< Displacement on the y axis */
 };
@@ -25,6 +33,9 @@ struct Vec2 {
  */
 class Shape {
 public:
+  Shape(const std::vector<Point> &vertices);
+  virtual ~Shape();
+
   /**
    * @brief Get the vertices defining the figure
    *
@@ -32,26 +43,31 @@ public:
    */
   const std::vector<Point> &getVertices(void) const;
 
-private:
-  /**
-   * @brief Updates the internal vertices
-   */
-  virtual void computeVertices(void);
+protected:
+  Shape();
 
   /**
    * @brief Buffer of the points defining the shape
    */
-  std::vector<Point> vertices;
+  std::vector<Point> vertices{};
 };
 
-struct Rectangle : public Shape {
+class Rectangle : public Shape {
 public:
-  Rectangle(const Point &origin, int width, int height, double angle = 0);
+  /**
+   * @brief Construct a rectangle from the top-left vertex.
+   *
+   * @param origin, top left vertex of the rectangle
+   * @param width, width of the rectangle
+   * @param height, height of the rectangle
+   *
+   * @note The vertices are computed clock-wise
+   */
+  Rectangle(const Point &origin, int width, int height);
 
 private:
-  void computeVertices(void) override;
+  void computeVertices(void);
   Point origin;
-  double angle;
   int width, height;
 };
 
