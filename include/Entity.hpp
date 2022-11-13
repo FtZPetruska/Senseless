@@ -22,6 +22,11 @@ public:
   const Vec2 &getAcceleration(void) const;
 
   /**
+   * @brief Get the current speed
+   */
+  const Vec2 &getSpeed(void) const;
+
+  /**
    * @brief Make the entity update his speed using his acceleration vector
    */
   void updateSpeed(void);
