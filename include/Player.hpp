@@ -39,19 +39,10 @@ public:
    */
   void removeItems(int count);
 
-  /**
-   * @brief Tell if the player is able to jump
-   *
-   * @return True if the player can jump, false otherwise
-   */
-  bool isAbleToJump(void) const;
-
-  /**
-   * @brief Set the player ability to jump
-   */
-  void setJumpStatus(bool jump_status);
-
 private:
+  void tryJump(void);
+  void trySonar(void);
+
   int item_count; /**< The remaining item count in player inventory */
   bool can_jump;  /**< True if the player is able to jump, false otherwise */
   std::chrono::time_point<std::chrono::high_resolution_clock>
@@ -59,6 +50,7 @@ private:
   Point last_sonar_position{};                             /**< Position from which the last sonar was executed */
   static constexpr std::chrono::seconds SONAR_COOLDOWN{1}; /**< Cooldown between two sonar usage */
   CommandQueue commands_backlog{};                         /**< Queue of all the commands to be processed */
+  static constexpr double MAX_HORIZONTAL_SPEED{50.0};
 };
 
 } // namespace GameLib
