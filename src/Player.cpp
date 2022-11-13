@@ -22,7 +22,11 @@ void Player::setJumpStatus(bool jump_status) {
   can_jump = jump_status;
 }
 
-void Player::manageInteraction(const Entity &) {}
+void Player::manageInteraction(const Entity &other) {
+  (void)other;
+  (void)last_sonar_position;
+  (void)SONAR_COOLDOWN;
+}
 
 void Player::checkForCollision(const PhysicalObject &other) {
   (void)other;

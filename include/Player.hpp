@@ -5,6 +5,7 @@
 
 #include "Command.hpp"
 #include "Entity.hpp"
+#include "GeometryUtilities.hpp"
 
 namespace GameLib {
 /**
@@ -51,7 +52,7 @@ private:
   std::chrono::time_point<std::chrono::high_resolution_clock>
       last_sonar_time_point{};            /**< Time point of the last sonar */
   Point last_sonar_position{};            /**< Position from which the last sonar was executed */
-  std::chrono::seconds SONAR_COOLDOWN{1}; /**< Cooldown between two sonar usage */
+  static constexpr std::chrono::seconds SONAR_COOLDOWN{1}; /**< Cooldown between two sonar usage */
   std::queue<Command> commands_backlog{}; /**< Queue of all the commands to be processed */
 };
 
