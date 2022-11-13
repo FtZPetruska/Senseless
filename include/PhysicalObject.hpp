@@ -23,7 +23,7 @@ public:
    */
   void setPosition(const Point &new_position);
 
-private:
+protected:
   Point position;                        /**< The position of the object*/
   Shape shape;                           /**< The shape of the object */
   static constexpr double GRAVITY{10.0}; /**< The static constant of gravity acceleration */

@@ -78,6 +78,22 @@ TEST_CASE("Point translation on two axis", "[Point]") {
   }
 }
 
+TEST_CASE("Point distance", "[Point]") {
+  SECTION("Distance between two points") {
+    const Point A_POINT{0, 0};
+    const Point OTHER_POINT{1, 1};
+    const double EXPECTED_DISTANCE{std::sqrt(2.0)};
+    REQUIRE(A_POINT.distance(OTHER_POINT) == EXPECTED_DISTANCE);
+  }
+
+  SECTION("Distance between two negative points") {
+    const Point A_POINT{-1, -1};
+    const Point OTHER_POINT{-2, -2};
+    const double EXPECTED_DISTANCE{std::sqrt(2.0)};
+    REQUIRE(A_POINT.distance(OTHER_POINT) == EXPECTED_DISTANCE);
+  }
+}
+
 TEST_CASE("Comparing two vectors", "[Vec2]") {
   const Vec2 UNIT_VECTOR{1.0, 1.0};
 
@@ -187,9 +203,45 @@ TEST_CASE("Rectangle sanity checks", "[Rectangle]") {
     REQUIRE(TEST_RECT.getVertices() == EXPECTED_RESULT);
   }
 
-  SECTION("Rectangle overlapping all quadrants") {
+  SECTION("Rectangle overlapping all quadrants", "[Rectangle]") {
     const Rectangle TEST_RECT{{-2, -4}, 4, 6};
     const std::vector<Point> EXPECTED_RESULT{{-2, -4}, {2, -4}, {2, 2}, {-2, 2}};
     REQUIRE(TEST_RECT.getVertices() == EXPECTED_RESULT);
+  }
+}
+
+TEST_CASE("Segment sanity checks", "[Segment]") {
+  SECTION("Segment with a non-zero origin") {
+    const Segment TEST_SEGMENT{{69, 96}, {489, 120}};
+    const std::vector<Point> EXPECTED_RESULT{{69, 96}, {489, 120}};
+    REQUIRE(TEST_SEGMENT.getVertices() == EXPECTED_RESULT);
+  }
+
+  SECTION("Segment overlapping all quadrants") {
+    const Segment TEST_SEGMENT{{-2, -4}, {2, 2}};
+    const std::vector<Point> EXPECTED_RESULT{{-2, -4}, {2, 2}};
+    REQUIRE(TEST_SEGMENT.getVertices() == EXPECTED_RESULT);
+  }
+}
+
+TEST_CASE("Segment intersection", "[Segment]") {
+  const Segment FIRST_SEGMENT{{0, 0}, {10, 10}};
+  const Segment SECOND_SEGMENT{{0, 10}, {10, 0}};
+
+  SECTION("Intersecting segments") {
+    const Point EXPECTED_RESULT{5, 5};
+    std::optional<Point> actual_result = FIRST_SEGMENT.intersect(SECOND_SEGMENT);
+    REQUIRE(actual_result.has_value());
+    REQUIRE(actual_result == EXPECTED_RESULT);
+  }
+
+  SECTION("Parallel segments") {
+    const Segment PARALLEL_SEGMENT{{10, 10}, {20, 20}};
+    REQUIRE(FIRST_SEGMENT.intersect(PARALLEL_SEGMENT).has_value() == false);
+  }
+
+  SECTION("Non-intersecting segments") {
+    const Segment NON_INTERSECTING_SEGMENT{{10, 0}, {15, 15}};
+    REQUIRE(FIRST_SEGMENT.intersect(NON_INTERSECTING_SEGMENT).has_value() == false);
   }
 }
