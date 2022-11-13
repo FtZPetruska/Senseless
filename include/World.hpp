@@ -20,7 +20,7 @@ public:
    *
    * @param commands The queue of commands to be executed
    */
-  void update(CommandQueue commands);
+  void update(const CommandQueue &commands);
 
   /**
    * @brief Get the state of the level

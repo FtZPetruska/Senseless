@@ -20,7 +20,7 @@ public:
   /**
    * @brief Consummes the commands in the queue and update the internal state
    */
-  void processCommands(CommandQueue &commands);
+  void processCommands(const CommandQueue &commands);
 
   /**
    * @brief Get the remaining count of player's item
@@ -58,7 +58,7 @@ private:
       last_sonar_time_point{};                             /**< Time point of the last sonar */
   Point last_sonar_position{};                             /**< Position from which the last sonar was executed */
   static constexpr std::chrono::seconds SONAR_COOLDOWN{1}; /**< Cooldown between two sonar usage */
-  CommandQueue &commands_backlog;                          /**< Queue of all the commands to be processed */
+  CommandQueue commands_backlog{};                         /**< Queue of all the commands to be processed */
 };
 
 } // namespace GameLib
