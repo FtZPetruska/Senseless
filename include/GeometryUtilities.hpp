@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <vector>
 
 namespace GameLib {
@@ -39,6 +40,15 @@ struct Point {
    */
   Point translate(const Vec2 &translation) const;
 
+  /**
+   * @brief Compute the distance between two points
+   *
+   * @param other The other point
+   *
+   * @return The distance
+   */
+  double distance(const Point &other) const;
+
   int x; /**< Horizontal coordinate */
   int y; /**< Vertical coordinate */
 };
@@ -73,7 +83,7 @@ public:
    * @param position The position to test
    * @return The type of collision that occured
    */
-  virtual CollisionDirection contains(const Point &position);
+  virtual CollisionDirection contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration);
 
 protected:
   Shape();
@@ -97,10 +107,33 @@ public:
    */
   Rectangle(const Point &origin, int width, int height);
 
+  CollisionDirection contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) override;
+
 private:
+  /**
+   * @brief Caracterize the collision with the vertex
+   *
+   * @param bouncing_box The bounding box of the shape
+   * @param vertex The origin of the colliding vertex
+   * @param translated_vertex The translated origin of the colliding vertex
+   *
+   * @return The distance from the collision and the direction of the collsion
+   */
+  std::pair<double, CollisionDirection> caracterizeCollision(const Point &vertiex,
+                                                             const Point &translated_vertex) const;
+
   void computeVertices(void);
   Point origin;
   int width, height;
+};
+
+struct Segment : public Shape {
+  Segment(const Point &a, const Point &b);
+  std::optional<const Point> intersect(const Segment &other, double epsilon = 0.01) const;
+  bool isOnSegment(const Point &p) const;
+
+  Point a;
+  Point b;
 };
 
 } // namespace GameLib

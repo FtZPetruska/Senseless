@@ -8,11 +8,11 @@ Shape::Shape() {}
 
 Shape::~Shape() {}
 
-CollisionDirection Shape::contains(const Point &position) {
-  (void)position;
-  return CollisionDirection::NO_COLLISION;
-}
-
 const std::vector<Point> &Shape::getVertices(void) const {
   return vertices;
+}
+
+CollisionDirection Shape::contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) {
+  Point dump = other_vertices[0].translate(acceleration);
+  throw std::bad_exception();
 }
