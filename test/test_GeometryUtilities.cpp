@@ -4,6 +4,80 @@
 
 using namespace GameLib;
 
+TEST_CASE("Point comparison tests", "[Point]") {
+  const Point A_POINT{1, 1};
+
+  SECTION("Compare against itself") {
+    REQUIRE(A_POINT == A_POINT);
+  }
+
+  SECTION("Compare against an identical object") {
+    const Point SAME_POINT{A_POINT};
+    REQUIRE(A_POINT == SAME_POINT);
+  }
+
+  SECTION("Compare against a different point") {
+    const Point OTHER_POINT{42, 69};
+    REQUIRE(A_POINT != OTHER_POINT);
+  }
+}
+
+TEST_CASE("Point translation on one axis", "[Point]") {
+  const Point STARTING_POINT{0, 0};
+
+  SECTION("Translate right") {
+    const Vec2 TRANSLATION{1.0, 0.0};
+    const Point EXPECTED_RESULT{1, 0};
+    REQUIRE(STARTING_POINT.translate(TRANSLATION) == EXPECTED_RESULT);
+  }
+
+  SECTION("Translate left") {
+    const Vec2 TRANSLATION{-1.0, 0.0};
+    const Point EXPECTED_RESULT{-1, 0};
+    REQUIRE(STARTING_POINT.translate(TRANSLATION) == EXPECTED_RESULT);
+  }
+
+  SECTION("Translate down") {
+    const Vec2 TRANSLATION{0.0, 1.0};
+    const Point EXPECTED_RESULT{0, 1};
+    REQUIRE(STARTING_POINT.translate(TRANSLATION) == EXPECTED_RESULT);
+  }
+
+  SECTION("Translate up") {
+    const Vec2 TRANSLATION{0.0, -1.0};
+    const Point EXPECTED_RESULT{0, -1};
+    REQUIRE(STARTING_POINT.translate(TRANSLATION) == EXPECTED_RESULT);
+  }
+}
+
+TEST_CASE("Point translation on two axis", "[Point]") {
+  const Point STARTING_POINT{0, 0};
+
+  SECTION("Translate right-down") {
+    const Vec2 TRANSLATION{1.0, 1.0};
+    const Point EXPECTED_RESULT{1, 1};
+    REQUIRE(STARTING_POINT.translate(TRANSLATION) == EXPECTED_RESULT);
+  }
+
+  SECTION("Translate left-down") {
+    const Vec2 TRANSLATION{-1.0, 1.0};
+    const Point EXPECTED_RESULT{-1, 1};
+    REQUIRE(STARTING_POINT.translate(TRANSLATION) == EXPECTED_RESULT);
+  }
+
+  SECTION("Translate right-up") {
+    const Vec2 TRANSLATION{1.0, -1.0};
+    const Point EXPECTED_RESULT{1, -1};
+    REQUIRE(STARTING_POINT.translate(TRANSLATION) == EXPECTED_RESULT);
+  }
+
+  SECTION("Translate left-up") {
+    const Vec2 TRANSLATION{-1.0, -1.0};
+    const Point EXPECTED_RESULT{-1, -1};
+    REQUIRE(STARTING_POINT.translate(TRANSLATION) == EXPECTED_RESULT);
+  }
+}
+
 TEST_CASE("Comparing two vectors", "[Vec2]") {
   const Vec2 UNIT_VECTOR{1.0, 1.0};
 
@@ -65,6 +139,32 @@ TEST_CASE("Regular vector operations", "[Vec2]") {
   SECTION("Substracting vectors") {
     const Vec2 EXPECTED_RESULT{76.0, -64.0};
     REQUIRE(FIRST_VECTOR - SECOND_VECTOR == EXPECTED_RESULT);
+  }
+}
+
+TEST_CASE("Vector horizontal clamp", "[Vec2]") {
+  static constexpr double LIMIT{2.0};
+  static constexpr double OVER_THE_LIMIT{LIMIT + 1.0};
+
+  SECTION("Within limit") {
+    Vec2 test_vector{1.0, -1.0};
+    const Vec2 EXPECTED_RESULT{test_vector};
+    test_vector.horizontalClamp(LIMIT);
+    REQUIRE(test_vector == EXPECTED_RESULT);
+  }
+
+  SECTION("Limit overflow") {
+    Vec2 test_vector{OVER_THE_LIMIT, 1.0};
+    const Vec2 EXPECTED_RESULT{LIMIT, test_vector.dy};
+    test_vector.horizontalClamp(LIMIT);
+    REQUIRE(test_vector == EXPECTED_RESULT);
+  }
+
+  SECTION("Limit underflow") {
+    Vec2 test_vector{-OVER_THE_LIMIT, 1.0};
+    const Vec2 EXPECTED_RESULT{-LIMIT, test_vector.dy};
+    test_vector.horizontalClamp(LIMIT);
+    REQUIRE(test_vector == EXPECTED_RESULT);
   }
 }
 

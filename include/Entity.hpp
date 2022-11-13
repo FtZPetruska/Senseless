@@ -9,10 +9,12 @@ namespace GameLib {
  */
 class Entity : public PhysicalObject {
 public:
+  virtual ~Entity();
+
   /**
    * @brief Set the acceleration vector
    */
-  void setAcceleration(const Vec2 &acceleration);
+  void setAcceleration(const Vec2 &new_acceleration);
 
   /**
    * @brief Get the acceleration vector
@@ -25,14 +27,23 @@ public:
   void updateSpeed(void);
 
   /**
-   * @brief Check if the current entity would collide
+   * @brief Make the Entity update its acceleration vector depending on its underlying type
+   */
+  virtual void updateAcceleration(void) = 0;
+
+  /**
+   * @brief Check if the current entity would collide, update its acceleration vector if needed.
    *
    * @param position The physical object to test
-   *
-   * @return <true, ...> if the entity is colliding in the x axis, <..., true> if the entity is colliding in the y axis,
-   * <false, false> otherwise
    */
-  std::pair<bool, bool> wouldCollideWithPhysicalObject(const PhysicalObject &other, const Vec2 &acceleration) const;
+  virtual void checkForCollision(const PhysicalObject &other) = 0;
+
+  /**
+   * @brief Updates the entity's state according to the other
+   *
+   * @param other The entity to interact with
+   */
+  virtual void manageInteraction(const Entity &other) = 0;
 
 private:
   Vec2 acceleration{0.0, 0.0};                     /**< Acceleration vector */

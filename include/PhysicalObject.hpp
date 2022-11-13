@@ -21,7 +21,7 @@ public:
    *
    * @param position The position of the object
    */
-  void setPosition(const Point &position);
+  void setPosition(const Point &new_position);
 
 private:
   Point position;                        /**< The position of the object*/

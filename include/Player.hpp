@@ -1,5 +1,9 @@
 #pragma once
 
+#include <chrono>
+#include <queue>
+
+#include "Command.hpp"
 #include "Entity.hpp"
 
 namespace GameLib {
@@ -8,6 +12,10 @@ namespace GameLib {
  */
 class Player : public Entity {
 public:
+  void updateAcceleration(void) override;
+  void checkForCollision(const PhysicalObject &other) override;
+  void manageInteraction(const Entity &other) override;
+
   /**
    * @brief Get the remaining count of player's item
    *
@@ -18,12 +26,12 @@ public:
   /**
    * @brief Set the item count
    */
-  void setItemCount(int item_count);
+  void setItemCount(int new_item_count);
 
   /**
    * @brief Remove n items from the player inventory
    */
-  void removeItems(int number);
+  void removeItems(int count);
 
   /**
    * @brief Tell if the player is able to jump
@@ -35,11 +43,16 @@ public:
   /**
    * @brief Set the player ability to jump
    */
-  void setJumpStatus(bool can_jump);
+  void setJumpStatus(bool jump_status);
 
 private:
   int item_count; /**< The remaining item count in player inventory */
   bool can_jump;  /**< True if the player is able to jump, false otherwise */
+  std::chrono::time_point<std::chrono::high_resolution_clock>
+      last_sonar_time_point{};            /**< Time point of the last sonar */
+  Point last_sonar_position{};            /**< Position from which the last sonar was executed */
+  std::chrono::seconds SONAR_COOLDOWN{1}; /**< Cooldown between two sonar usage */
+  std::queue<Command> commands_backlog{}; /**< Queue of all the commands to be processed */
 };
 
 } // namespace GameLib
