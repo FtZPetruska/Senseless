@@ -210,6 +210,76 @@ TEST_CASE("Rectangle sanity checks", "[Rectangle]") {
   }
 }
 
+TEST_CASE("Rectangle collision with below", "[Rectangle]") {
+  const Rectangle TEST_RECT{{0, 0}, 100, 100};
+  const std::vector<Point> BELOW_RECTANGLE{{50, 300}, {150, 300}, {150, 200}, {50, 200}};
+
+  SECTION("Collision with a Rectangle below") {
+    const Vec2 COLLISION_VECTOR{0, -150};
+    REQUIRE(TEST_RECT.contains(BELOW_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::DOWN);
+  }
+
+  SECTION("Collision with a Rectangle below") {
+    const Vec2 NO_COLLISION_VECTOR{100, 0};
+    REQUIRE(TEST_RECT.contains(BELOW_RECTANGLE, NO_COLLISION_VECTOR) == CollisionDirection::NO_COLLISION);
+  }
+}
+
+TEST_CASE("Rectangle collision with above", "[Rectangle]") {
+  const Rectangle TEST_RECT{{0, 0}, 100, 100};
+  const std::vector<Point> ABOVE_RECTANGLE{{50, -200}, {150, -200}, {150, -100}, {50, -100}};
+
+  SECTION("Collision with a Rectangle above") {
+    const Vec2 COLLISION_VECTOR{0, 150};
+    REQUIRE(TEST_RECT.contains(ABOVE_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::UP);
+  }
+
+  SECTION("Collision with a Rectangle above") {
+    const Vec2 NO_COLLISION_VECTOR{100, 0};
+    REQUIRE(TEST_RECT.contains(ABOVE_RECTANGLE, NO_COLLISION_VECTOR) == CollisionDirection::NO_COLLISION);
+  }
+}
+
+TEST_CASE("Rectangle collision with left", "[Rectangle]") {
+  const Rectangle TEST_RECT{{0, 0}, 100, 100};
+  const std::vector<Point> LEFT_RECTANGLE{{-200, 50}, {-100, 50}, {-100, 150}, {-200, 150}};
+
+  SECTION("Collision with a Rectangle to the left") {
+    const Vec2 COLLISION_VECTOR{150, 0};
+    REQUIRE(TEST_RECT.contains(LEFT_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::LEFT);
+  }
+
+  SECTION("Collision with a Rectangle to the left") {
+    const Vec2 NO_COLLISION_VECTOR{0, 100};
+    REQUIRE(TEST_RECT.contains(LEFT_RECTANGLE, NO_COLLISION_VECTOR) == CollisionDirection::NO_COLLISION);
+  }
+}
+
+TEST_CASE("Rectangle collision with right", "[Rectangle]") {
+  const Rectangle TEST_RECT{{0, 0}, 100, 100};
+  const std::vector<Point> RIGHT_RECTANGLE{{200, 150}, {300, 150}, {300, 50}, {200, 50}};
+
+  SECTION("Collision with a Rectangle to the right") {
+    const Vec2 COLLISION_VECTOR{-150, 0};
+    REQUIRE(TEST_RECT.contains(RIGHT_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::RIGHT);
+  }
+
+  SECTION("Collision with a Rectangle to the right") {
+    const Vec2 NO_COLLISION_VECTOR{0, -100};
+    REQUIRE(TEST_RECT.contains(RIGHT_RECTANGLE, NO_COLLISION_VECTOR) == CollisionDirection::NO_COLLISION);
+  }
+}
+
+TEST_CASE("Rectangle collision with right in diagonal", "[Rectangle]") {
+  const Rectangle TEST_RECT{{0, 0}, 100, 100};
+  const std::vector<Point> RIGHT_DIAGONAL_RECTANGLE{{150, 200}, {250, 150}, {250, 100}, {150, 100}};
+
+  SECTION("Collision with a Rectangle to the left") {
+    const Vec2 COLLISION_VECTOR{-100, -50};
+    REQUIRE(TEST_RECT.contains(RIGHT_DIAGONAL_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::RIGHT);
+  }
+}
+
 TEST_CASE("Segment sanity checks", "[Segment]") {
   SECTION("Segment with a non-zero origin") {
     const Segment TEST_SEGMENT{{69, 96}, {489, 120}};
@@ -237,11 +307,11 @@ TEST_CASE("Segment intersection", "[Segment]") {
 
   SECTION("Parallel segments") {
     const Segment PARALLEL_SEGMENT{{10, 10}, {20, 20}};
-    REQUIRE(FIRST_SEGMENT.intersect(PARALLEL_SEGMENT).has_value() == false);
+    REQUIRE_FALSE(FIRST_SEGMENT.intersect(PARALLEL_SEGMENT).has_value());
   }
 
   SECTION("Non-intersecting segments") {
     const Segment NON_INTERSECTING_SEGMENT{{10, 0}, {15, 15}};
-    REQUIRE(FIRST_SEGMENT.intersect(NON_INTERSECTING_SEGMENT).has_value() == false);
+    REQUIRE_FALSE(FIRST_SEGMENT.intersect(NON_INTERSECTING_SEGMENT).has_value());
   }
 }

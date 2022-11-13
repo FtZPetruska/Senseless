@@ -6,36 +6,46 @@ Rectangle::Rectangle(const Point &origin, int width, int height) : origin(origin
   computeVertices();
 }
 
-/** TODO */
-CollisionDirection Rectangle::contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) {
-  CollisionDirection collision_direction = CollisionDirection::NO_COLLISION;
+CollisionDirection Rectangle::contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) const {
+  CollisionDirection closest_collision_direction = CollisionDirection::NO_COLLISION;
+  double closest_distance_from_collision = std::numeric_limits<double>::max();
   for (const auto &vertex : other_vertices) {
-    Point translated_vertex = vertex.translate(acceleration); 
-    if (translated_vertex.x >= origin.x && translated_vertex.x <= origin.x + width && translated_vertex.y >= origin.y ||
-        translated_vertex.y <= origin.y + height) {
-      return CollisionDirection::NO_COLLISION;
-    }
-  }
-  return CollisionDirection::NO_COLLISION;
-}
-
-std::pair<double, CollisionDirection> Rectangle::caracterizeCollision(const Point &other_vertex,
-                                                                      const Point &other_translated_vertex) const {
-  Segment other{other_vertex, other_translated_vertex};
-  for (int i = 1; i < vertices.size(); i++) {
-    Segment current_segment{vertices[i - 1], vertices[i]};
-    std::optional<Point> intersection = current_segment.intersect(other);
-    if (intersection.has_value()) {
-      if (i % 2 == 1) {
-        return std::pair<double, CollisionDirection>{other_vertex.distance(intersection.value()),
-                                                     CollisionDirection::HORIZONTAL};
-      } else {
-        return std::pair<double, CollisionDirection>{other_vertex.distance(intersection.value()),
-                                                     CollisionDirection::VERTICAL};
+    Point translated_vertex = vertex.translate(acceleration);
+    Segment movement_trace(vertex, translated_vertex);
+    for (int vertex_index = 0; vertex_index < vertices.size(); vertex_index++) {
+      Segment edge(vertices[vertex_index], vertices[(vertex_index + 1) % vertices.size()]);
+      std::optional<Point> intersection = movement_trace.intersect(edge);
+      if (intersection.has_value()) {
+        CollisionDirection current_collision_direction = vertexIndexToColisionDirection(vertex_index);
+        double current_distance_from_collision = vertex.distance(intersection.value());
+        if (current_distance_from_collision < closest_distance_from_collision) {
+          closest_distance_from_collision = current_distance_from_collision;
+          closest_collision_direction = current_collision_direction;
+        }
       }
     }
   }
-  return std::pair<double, CollisionDirection>{-1, CollisionDirection::NO_COLLISION};
+  return closest_collision_direction;
+}
+
+CollisionDirection Rectangle::vertexIndexToColisionDirection(int vertex_index) const {
+  switch (vertex_index) {
+  case 0:
+    return CollisionDirection::UP;
+    break;
+  case 1:
+    return CollisionDirection::RIGHT;
+    break;
+  case 2:
+    return CollisionDirection::DOWN;
+    break;
+  case 3:
+    return CollisionDirection::LEFT;
+    break;
+  default:
+    throw std::bad_exception();
+    break;
+  }
 }
 
 void Rectangle::computeVertices(void) {
