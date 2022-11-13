@@ -11,6 +11,7 @@ enum class Command {
   MOVE_RIGHT,
   MOVE_LEFT,
   JUMP,
+  SONAR,
   NO_COMMAND
 };
 
