@@ -1,5 +1,7 @@
 #pragma once
 
+#include <queue>
+
 namespace GameLib {
 
 /**
@@ -11,5 +13,7 @@ enum class Command {
   JUMP,
   NO_COMMAND
 };
+
+using CommandQueue = std::queue<Command>;
 
 } // namespace GameLib

@@ -18,6 +18,11 @@ public:
   void manageInteraction(const Entity &other) override;
 
   /**
+   * @brief Consummes the commands in the queue and update the internal state
+   */
+  void processCommands(CommandQueue &commands);
+
+  /**
    * @brief Get the remaining count of player's item
    *
    * @return The player count
@@ -50,10 +55,10 @@ private:
   int item_count; /**< The remaining item count in player inventory */
   bool can_jump;  /**< True if the player is able to jump, false otherwise */
   std::chrono::time_point<std::chrono::high_resolution_clock>
-      last_sonar_time_point{};            /**< Time point of the last sonar */
-  Point last_sonar_position{};            /**< Position from which the last sonar was executed */
+      last_sonar_time_point{};                             /**< Time point of the last sonar */
+  Point last_sonar_position{};                             /**< Position from which the last sonar was executed */
   static constexpr std::chrono::seconds SONAR_COOLDOWN{1}; /**< Cooldown between two sonar usage */
-  std::queue<Command> commands_backlog{}; /**< Queue of all the commands to be processed */
+  CommandQueue &commands_backlog;                          /**< Queue of all the commands to be processed */
 };
 
 } // namespace GameLib
