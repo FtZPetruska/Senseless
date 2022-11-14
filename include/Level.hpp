@@ -9,7 +9,6 @@
 #include "PhysicalObject.hpp"
 #include "Player.hpp"
 #include "StateDTO.hpp"
-#include "StateDTOAssembler.hpp"
 
 namespace GameLib {
 
