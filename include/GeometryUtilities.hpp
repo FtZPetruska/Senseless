@@ -49,6 +49,15 @@ struct Point {
    */
   double distance(const Point &other) const;
 
+  /**
+   * @brief Get a translation towards the destination with a max length
+   *
+   * @param destination The point to go toward
+   * @param max_distance How far from the origin the result may be
+   * @return The next point toward the destination, or the destination itself if closer than max_distance.
+   */
+  Vec2 getCappedTranslationVector(const Point &destination, double max_distance) const;
+
   int x; /**< Horizontal coordinate */
   int y; /**< Vertical coordinate */
 };
