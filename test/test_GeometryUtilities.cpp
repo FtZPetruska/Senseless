@@ -280,6 +280,26 @@ TEST_CASE("Rectangle collision with right in diagonal", "[Rectangle]") {
   }
 }
 
+TEST_CASE("Rectangle collision with left in diagonal", "[Rectangle]") {
+  const Rectangle TEST_RECT{{0, 0}, 100, 100};
+  const std::vector<Point> LEFT_DIAGONAL_RECTANGLE{{-150, 200}, {-50, 200}, {-50, 100}, {-150, 100}};
+
+  SECTION("Collision with a Rectangle to the left") {
+    const Vec2 COLLISION_VECTOR{100, -50};
+    REQUIRE(TEST_RECT.contains(LEFT_DIAGONAL_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::LEFT);
+  }
+}
+
+TEST_CASE("Rectangle collision with left in tricky diagonal (the vector cross two side)", "[Rectangle]") {
+  const Rectangle TEST_RECT{{0, 0}, 100, 100};
+  const std::vector<Point> LEFT_DIAGONAL_RECTANGLE{{-150, 200}, {-50, 200}, {-50, 100}, {-150, 100}};
+
+  SECTION("Collision with a Rectangle to the left") {
+    const Vec2 COLLISION_VECTOR{200, -100};
+    REQUIRE(TEST_RECT.contains(LEFT_DIAGONAL_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::LEFT);
+  }
+}
+
 TEST_CASE("Segment sanity checks", "[Segment]") {
   SECTION("Segment with a non-zero origin") {
     const Segment TEST_SEGMENT{{69, 96}, {489, 120}};
