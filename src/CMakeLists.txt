@@ -6,6 +6,7 @@ add_library(
   "GeometryUtilities/Point.cpp"
   "GeometryUtilities/Rectangle.cpp"
   "GeometryUtilities/Shape.cpp"
-  "GeometryUtilities/Vec2.cpp")
+  "GeometryUtilities/Vec2.cpp"
+  "GeometryUtilities/Segment.cpp")
 target_include_directories(game PUBLIC ${SL_PUBLIC_INCLUDE_DIR})
 apply_options_to_target(game)
