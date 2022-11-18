@@ -12,7 +12,7 @@ CollisionDirection Rectangle::contains(const std::vector<Point> &other_vertices,
   for (const auto &vertex : other_vertices) {
     Point translated_vertex = vertex.translate(acceleration);
     Segment movement_trace(vertex, translated_vertex);
-    for (int vertex_index = 0; vertex_index < vertices.size(); vertex_index++) {
+    for (std::size_t vertex_index = 0; vertex_index < vertices.size(); vertex_index++) {
       Segment edge(vertices[vertex_index], vertices[(vertex_index + 1) % vertices.size()]);
       std::optional<Point> intersection = movement_trace.intersect(edge);
       if (intersection.has_value()) {
@@ -28,7 +28,7 @@ CollisionDirection Rectangle::contains(const std::vector<Point> &other_vertices,
   return closest_collision_direction;
 }
 
-CollisionDirection Rectangle::vertexIndexToColisionDirection(int vertex_index) const {
+CollisionDirection Rectangle::vertexIndexToColisionDirection(std::size_t vertex_index) const {
   switch (vertex_index) {
   case 0:
     return CollisionDirection::UP;
