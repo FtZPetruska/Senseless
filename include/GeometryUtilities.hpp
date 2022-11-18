@@ -119,7 +119,7 @@ private:
    * 
    * @return The direction of the collsion
    */
-  CollisionDirection vertexIndexToColisionDirection(int vertex_index) const;
+  CollisionDirection vertexIndexToColisionDirection(std::size_t vertex_index) const;
 
   void computeVertices(void);
   Point origin;
