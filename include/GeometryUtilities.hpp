@@ -57,9 +57,11 @@ struct Point {
  * @brief Define the axis in which the collision happened
  */
 enum class CollisionDirection {
-  NO_COLLISION,
-  HORIZONTAL,
-  VERTICAL
+  UP,
+  RIGHT,
+  DOWN,
+  LEFT,
+  NO_COLLISION
 };
 
 /**
@@ -83,7 +85,7 @@ public:
    * @param position The position to test
    * @return The type of collision that occured
    */
-  virtual CollisionDirection contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration);
+  virtual CollisionDirection contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) const;
 
 protected:
   Shape();
@@ -107,20 +109,17 @@ public:
    */
   Rectangle(const Point &origin, int width, int height);
 
-  CollisionDirection contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) override;
+  CollisionDirection contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) const override;
 
 private:
   /**
-   * @brief Caracterize the collision with the vertex
+   * @brief Find the orientation of the collision 
    *
-   * @param bouncing_box The bounding box of the shape
-   * @param vertex The origin of the colliding vertex
-   * @param translated_vertex The translated origin of the colliding vertex
-   *
-   * @return The distance from the collision and the direction of the collsion
+   * @param vertex_index The index of the vertex with which the collision occured
+   * 
+   * @return The direction of the collsion
    */
-  std::pair<double, CollisionDirection> caracterizeCollision(const Point &vertiex,
-                                                             const Point &translated_vertex) const;
+  CollisionDirection vertexIndexToColisionDirection(int vertex_index) const;
 
   void computeVertices(void);
   Point origin;
