@@ -121,27 +121,29 @@ public:
   CollisionDirection contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) const override;
 
 private:
-  /**
-   * @brief Find the orientation of the collision 
-   *
-   * @param vertex_index The index of the vertex with which the collision occured
-   * 
-   * @return The direction of the collsion
-   */
-  CollisionDirection vertexIndexToColisionDirection(std::size_t vertex_index) const;
-
   void computeVertices(void);
   Point origin;
   int width, height;
 };
 
 struct Segment : public Shape {
-  Segment(const Point &a, const Point &b);
-  std::optional<const Point> intersect(const Segment &other, double epsilon = 0.01) const;
-  bool isOnSegment(const Point &p) const;
+  Segment(const Point &first, const Point &second);
 
-  Point a;
-  Point b;
+  /**
+   * @brief Searches for the intersection between two segments
+   *
+   * @param other The segment to check for an intersection with
+   * @return An optional containing the intersection point if any
+   */
+  std::optional<const Point> intersect(const Segment &other) const;
+
+  /**
+   * @brief Checks if a point belongs to the segment
+   *
+   * @param candidate Candidate point to check
+   * @return Whether the point is on the segment or not
+   */
+  bool isOnSegment(const Point &candidate) const;
 };
 
 } // namespace GameLib

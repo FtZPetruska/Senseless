@@ -3,37 +3,34 @@
 
 using namespace GameLib;
 
-Segment::Segment(const Point &a, const Point &b) : a(a), b(b) {
-  vertices = {a, b};
-}
+Segment::Segment(const Point &first, const Point &second) : Shape({first, second}) {}
 
-std::optional<const Point> Segment::intersect(const Segment &other, double epsilon) const {
-  int a1 = b.y - a.y;
-  int b1 = a.x - b.x;
-  int c1 = a1 * (a.x) + b1 * (a.y);
+std::optional<const Point> Segment::intersect(const Segment &other) const {
+  int local_delta_y = vertices[1].y - vertices[0].y;
+  int local_delta_x = vertices[0].x - vertices[1].x;
+  int local_coefficient = local_delta_y * vertices[0].x + local_delta_x * vertices[0].y;
 
-  int a2 = other.b.y - other.a.y;
-  int b2 = other.a.x - other.b.x;
-  int c2 = a2 * (other.a.x) + b2 * (other.a.y);
+  int other_delta_y = other.vertices[1].y - other.vertices[0].y;
+  int other_delta_x = other.vertices[0].x - other.vertices[1].x;
+  int other_coefficient = other_delta_y * other.vertices[0].x + other_delta_x * other.vertices[0].y;
 
-  int determinant = a1 * b2 - a2 * b1;
+  int determinant = local_delta_y * other_delta_x - other_delta_y * local_delta_x;
 
-  if (determinant < epsilon && determinant > -epsilon) {
-    // The lines are parallel. This is simplified
-    // by returning a pair of FLT_MAX
+  if (determinant == 0) {
     return std::nullopt;
-  } else {
-    int x = (b2 * c1 - b1 * c2) / determinant;
-    int y = (a1 * c2 - a2 * c1) / determinant;
-    Point intersection = Point{x, y};
-    if (!isOnSegment(intersection) || !other.isOnSegment(intersection)) {
-      return std::nullopt;
-    }
-    return Point{x, y};
   }
+
+  int intersection_x = (other_delta_x * local_coefficient - local_delta_x * other_coefficient) / determinant;
+  int intersection_y = (local_delta_y * other_coefficient - other_delta_y * local_coefficient) / determinant;
+  Point intersection = Point{intersection_x, intersection_y};
+  if (!isOnSegment(intersection) || !other.isOnSegment(intersection)) {
+    return std::nullopt;
+  }
+  return Point{intersection_x, intersection_y};
 }
 
-bool Segment::isOnSegment(const Point &p) const {
-  return p.x <= std::max(a.x, b.x) && p.x >= std::min(a.x, b.x) && p.y <= std::max(a.y, b.y) &&
-         p.y >= std::min(a.y, b.y);
+bool Segment::isOnSegment(const Point &candidate) const {
+  return candidate.x <= std::max(vertices[0].x, vertices[1].x) &&
+         candidate.x >= std::min(vertices[0].x, vertices[1].x) &&
+         candidate.y <= std::max(vertices[0].y, vertices[1].y) && candidate.y >= std::min(vertices[0].y, vertices[1].y);
 }
