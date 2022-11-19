@@ -2,6 +2,8 @@
 
 #include "GeometryUtilities.hpp"
 
+#include <cmath>
+
 using namespace GameLib;
 
 TEST_CASE("Point comparison tests", "[Point]") {
