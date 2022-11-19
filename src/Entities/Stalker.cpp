@@ -7,19 +7,19 @@
 
 using namespace GameLib;
 
-Stalker::Stalker(const Point &starting_position, const Shape &shape) : Entity(starting_position, shape) {}
+Stalker::Stalker(const Point &starting_position, const Shape &entity_shape) : Entity(starting_position, entity_shape) {}
 
 void Stalker::updateAcceleration(void) {
   if (path.empty()) {
     return;
   }
 
-  const Point &current_position = getCurrentPosition();
+  const Point &position = getCurrentPosition();
   const Point &destination = path.front();
-  const Vec2 ACCELERATION = current_position.getCappedTranslationVector(destination, MAX_HORIZONTAL_SPEED);
+  const Vec2 ACCELERATION = position.getCappedTranslationVector(destination, MAX_HORIZONTAL_SPEED);
   setAcceleration(ACCELERATION);
 
-  if (path.front() == current_position) {
+  if (path.front() == position) {
     path.pop();
   }
 }

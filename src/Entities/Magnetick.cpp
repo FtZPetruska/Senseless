@@ -4,16 +4,16 @@
 
 using namespace GameLib;
 
-Magnetick::Magnetick(const Point &starting_position, const Shape &shape)
-    : Entity(starting_position, shape), target_position(starting_position) {}
+Magnetick::Magnetick(const Point &starting_position, const Shape &entity_shape)
+    : Entity(starting_position, entity_shape), target_position(starting_position) {}
 
 void Magnetick::updateAcceleration(void) {
-  const Point &current_position = getCurrentPosition();
-  if (current_position == target_position) {
+  const Point &position = getCurrentPosition();
+  if (position == target_position) {
     setAcceleration({0.0, 0.0});
     return;
   }
-  const Vec2 ACCELERATION = current_position.getCappedTranslationVector(target_position, MAX_HORIZONTAL_SPEED);
+  const Vec2 ACCELERATION = position.getCappedTranslationVector(target_position, MAX_HORIZONTAL_SPEED);
   setAcceleration(ACCELERATION);
 }
 

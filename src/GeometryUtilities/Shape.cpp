@@ -2,7 +2,7 @@
 
 using namespace GameLib;
 
-Shape::Shape(const std::vector<Point> &vertices) : vertices(vertices) {}
+Shape::Shape(const std::vector<Point> &shape_vertices) : vertices(shape_vertices) {}
 
 Shape::Shape() {}
 

@@ -119,11 +119,6 @@ public:
   Rectangle(const Point &origin, int width, int height);
 
   CollisionDirection contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) const override;
-
-private:
-  void computeVertices(void);
-  Point origin;
-  int width, height;
 };
 
 struct Segment : public Shape {

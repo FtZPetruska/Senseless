@@ -6,16 +6,16 @@
 
 using namespace GameLib;
 
-Luis::Luis(const Point &starting_position, const Shape &shape)
-    : Entity(starting_position, shape), latest_sound_location(starting_position) {}
+Luis::Luis(const Point &starting_position, const Shape &entity_shape)
+    : Entity(starting_position, entity_shape), latest_sound_location(starting_position) {}
 
 void Luis::updateAcceleration(void) {
-  const Point &current_position = getCurrentPosition();
-  if (current_position == latest_sound_location) {
+  const Point &position = getCurrentPosition();
+  if (position == latest_sound_location) {
     setAcceleration({0.0, 0.0});
     return;
   }
-  const Vec2 ACCELERATION = current_position.getCappedTranslationVector(latest_sound_location, MAX_HORIZONTAL_SPEED);
+  const Vec2 ACCELERATION = position.getCappedTranslationVector(latest_sound_location, MAX_HORIZONTAL_SPEED);
   setAcceleration(ACCELERATION);
 }
 

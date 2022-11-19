@@ -1,14 +1,17 @@
 #include "GeometryUtilities.hpp"
 
+#include <limits>
 #include <stdexcept>
 
 using namespace GameLib;
 
 static CollisionDirection vertexIndexToColisionDirection(std::size_t vertex_index);
 
-Rectangle::Rectangle(const Point &origin, int width, int height) : origin(origin), width(width), height(height) {
-  computeVertices();
-}
+Rectangle::Rectangle(const Point &origin, int width, int height)
+    : Shape({{origin},
+             {origin.x + width, origin.y},
+             {origin.x + width, origin.y + height},
+             {origin.x, origin.y + height}}) {}
 
 CollisionDirection Rectangle::contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) const {
   CollisionDirection closest_collision_direction = CollisionDirection::NO_COLLISION;
@@ -50,9 +53,4 @@ static CollisionDirection vertexIndexToColisionDirection(std::size_t vertex_inde
     throw std::out_of_range("There cannot be more than 4 vertices in a rectangle");
     break;
   }
-}
-
-void Rectangle::computeVertices(void) {
-  vertices = {
-      {origin}, {origin.x + width, origin.y}, {origin.x + width, origin.y + height}, {origin.x, origin.y + height}};
 }

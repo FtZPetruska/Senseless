@@ -2,7 +2,7 @@
 
 using namespace GameLib;
 
-Vagrant::Vagrant(const Point &starting_position, const Shape &shape) : Entity(starting_position, shape) {}
+Vagrant::Vagrant(const Point &starting_position, const Shape &entity_shape) : Entity(starting_position, entity_shape) {}
 
 // Vagrant doesn't accelerate, it's at full speed at all time
 void Vagrant::updateAcceleration(void) {}

@@ -2,7 +2,8 @@
 
 using namespace GameLib;
 
-Entity::Entity(const Point &starting_position, const Shape &shape) : PhysicalObject(starting_position, shape) {}
+Entity::Entity(const Point &starting_position, const Shape &entity_shape)
+    : PhysicalObject(starting_position, entity_shape) {}
 
 void Entity::setAcceleration(const Vec2 &new_acceleration) {
   acceleration = new_acceleration;

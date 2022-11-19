@@ -4,8 +4,8 @@
 
 using namespace GameLib;
 
-Player::Player(const Point &starting_position, const Shape &shape)
-    : Entity(starting_position, shape), last_sonar_position(starting_position) {}
+Player::Player(const Point &starting_position, const Shape &entity_shape)
+    : Entity(starting_position, entity_shape), last_sonar_position(starting_position) {}
 
 int Player::getItemCount(void) const {
   return item_count;
@@ -33,14 +33,14 @@ void Player::updateAcceleration(void) {
       static constexpr double INCREMENT_SPEED{MAX_HORIZONTAL_SPEED / 2.0};
       return std::abs(current_horizontal_speed) + INCREMENT_SPEED;
     };
-    const Vec2 &current_speed = getSpeed();
-    const Vec2 &current_accel = getAcceleration();
+    const Vec2 &speed = getSpeed();
+    const Vec2 &accel = getAcceleration();
     switch (commands_backlog.front()) {
     case Command::MOVE_RIGHT:
-      setAcceleration({COMPUTE_HORIZONTAL_DISPLACEMENT(current_speed.dx), current_accel.dy});
+      setAcceleration({COMPUTE_HORIZONTAL_DISPLACEMENT(speed.dx), accel.dy});
       break;
     case Command::MOVE_LEFT:
-      setAcceleration({COMPUTE_HORIZONTAL_DISPLACEMENT(current_speed.dx) * -1.0, current_accel.dy});
+      setAcceleration({COMPUTE_HORIZONTAL_DISPLACEMENT(speed.dx) * -1.0, accel.dy});
       break;
     case Command::JUMP:
       tryJump();
@@ -49,7 +49,7 @@ void Player::updateAcceleration(void) {
       trySonar();
       break;
     case Command::NO_COMMAND:
-      setAcceleration({-current_speed.dx, current_accel.dy});
+      setAcceleration({-speed.dx, accel.dy});
       break;
     default:
       break;

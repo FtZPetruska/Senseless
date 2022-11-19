@@ -2,7 +2,7 @@
 
 using namespace GameLib;
 
-Doorman::Doorman(const Point &starting_position, const Shape &shape) : Entity(starting_position, shape) {}
+Doorman::Doorman(const Point &starting_position, const Shape &entity_shape) : Entity(starting_position, entity_shape) {}
 
 void Doorman::updateAcceleration(void) {}
 
