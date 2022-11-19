@@ -2,10 +2,13 @@
 
 using namespace GameLib;
 
-const Point &PhysicalObject::getPosition(void) const {
-  return position;
+PhysicalObject::PhysicalObject(const Point &starting_position, const Shape &shape)
+    : current_position(starting_position), shape(shape) {}
+
+const Point &PhysicalObject::getCurrentPosition(void) const {
+  return current_position;
 }
 
-void PhysicalObject::setPosition(const Point &new_position) {
-  position = new_position;
+void PhysicalObject::setCurrentPosition(const Point &new_position) {
+  current_position = new_position;
 }
