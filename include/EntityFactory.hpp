@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Entity.hpp"
 #include "EntitySetting.hpp"
 
@@ -11,6 +13,6 @@ namespace GameLib {
  *
  * @return the instantiated object
  */
-Entity makeEntity(const EntitySetting &entity_setting);
+std::unique_ptr<Entity> makeEntity(const EntitySetting &entity_setting);
 
 } // namespace GameLib

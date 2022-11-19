@@ -9,6 +9,7 @@ namespace GameLib {
  */
 class Entity : public PhysicalObject {
 public:
+  Entity(const Point &starting_position, const Shape &shape);
   virtual ~Entity();
 
   /**

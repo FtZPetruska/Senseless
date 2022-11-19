@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <queue>
 #include <string>
 #include <vector>
@@ -32,10 +33,10 @@ public:
   const StateDTO getStateDTO(void) const;
 
 private:
-  const std::string level_name;          /**< Level name */
-  std::vector<Entity> entities;          /**< Collection of all the entities */
-  std::vector<PhysicalObject> obstacles; /**< Collection of the physical object use as obstacles*/
-  Player player;                         /**< The playable charactere */
+  const std::string level_name;                  /**< Level name */
+  std::vector<std::unique_ptr<Entity>> entities; /**< Collection of all the entities */
+  std::vector<PhysicalObject> obstacles;         /**< Collection of the physical object use as obstacles*/
+  Player player;                                 /**< The playable charactere */
 };
 
 } // namespace GameLib
