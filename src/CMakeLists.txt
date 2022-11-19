@@ -1,6 +1,13 @@
 add_library(
   game STATIC
-  "Entity.cpp"
+  "Entities/Doorman.cpp"
+  "Entities/Entity.cpp"
+  "Entities/EntityFactory.cpp"
+  "Entities/Luis.cpp"
+  "Entities/Magnetick.cpp"
+  "Entities/Player.cpp"
+  "Entities/Stalker.cpp"
+  "Entities/Vagrant.cpp"
   "PhysicalObject.cpp"
   "Player.cpp"
   "GeometryUtilities/Point.cpp"

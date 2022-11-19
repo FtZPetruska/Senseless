@@ -4,6 +4,9 @@
 
 using namespace GameLib;
 
+Player::Player(const Point &starting_position, const Shape &shape)
+    : Entity(starting_position, shape), last_sonar_position(starting_position) {}
+
 int Player::getItemCount(void) const {
   return item_count;
 }
@@ -76,6 +79,22 @@ void Player::trySonar(void) {
     return;
   }
 
-  last_sonar_position = getPosition();
+  last_sonar_position = getCurrentPosition();
   last_sonar_time_point = current_time_point;
+}
+
+const Point &Player::getLastSonarPosition(void) const {
+  return last_sonar_position;
+}
+
+bool Player::hasMagnetickAttached(void) const {
+  return magnetick_count == 0;
+}
+
+void Player::attachMagnetick(void) {
+  ++magnetick_count;
+}
+
+void Player::popMagnetick(void) {
+  --magnetick_count;
 }
