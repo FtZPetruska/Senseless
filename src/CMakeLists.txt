@@ -9,7 +9,7 @@ add_library(
   "Entities/Stalker.cpp"
   "Entities/Vagrant.cpp"
   "PhysicalObject.cpp"
-  "Player.cpp"
+  "Level.cpp"
   "GeometryUtilities/Point.cpp"
   "GeometryUtilities/Rectangle.cpp"
   "GeometryUtilities/Shape.cpp"
