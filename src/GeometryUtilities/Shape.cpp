@@ -13,6 +13,6 @@ const std::vector<Point> &Shape::getVertices(void) const {
 }
 
 CollisionDirection Shape::contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) const {
-  Point dump = other_vertices[0].translate(acceleration);
+  (void)other_vertices[0].translate(acceleration);
   throw std::bad_exception();
 }
