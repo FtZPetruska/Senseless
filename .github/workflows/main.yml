@@ -49,7 +49,10 @@ jobs:
                        llvm \
                        clang-format \
                        iwyu \
-                       ccache
+                       ccache \
+                       catch2 \
+                       doxygen \
+                       graphviz
           echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
 
       - name: Configure with GCC
@@ -62,7 +65,8 @@ jobs:
             -DSL_ENABLE_CCACHE=ON \
             -DSL_ENABLE_IWYU=ON \
             -DSL_ENABLE_CLANG_FORMAT=ON \
-            -DSL_ENABLE_TESTS=ON
+            -DSL_ENABLE_TESTS=ON \
+            -DSL_USE_VCPKG=ON
 
       - name: Configure with LLVM
         if: matrix.compiler == 'llvm'
@@ -75,7 +79,8 @@ jobs:
             -DSL_ENABLE_IWYU=ON \
             -DSL_ENABLE_CLANG_TIDY=ON \
             -DSL_ENABLE_CLANG_FORMAT=ON \
-            -DSL_ENABLE_TESTS=ON
+            -DSL_ENABLE_TESTS=ON \
+            -DSL_USE_VCPKG=ON
 
       - name: Configure with Apple Clang
         if: matrix.compiler == 'apple-clang'
@@ -88,7 +93,8 @@ jobs:
             -DSL_ENABLE_IWYU=ON \
             -DSL_ENABLE_CLANG_TIDY=ON \
             -DSL_ENABLE_CLANG_FORMAT=ON \
-            -DSL_ENABLE_TESTS=ON
+            -DSL_ENABLE_TESTS=ON \
+            -DSL_ENABLE_DOXYGEN=ON
 
       - name: Build project
         run: cmake --build build --verbose
