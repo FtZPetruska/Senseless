@@ -1,9 +1,14 @@
 #include "GeometryUtilities.hpp"
 #include <optional>
+#include <stdexcept>
 
 using namespace GameLib;
 
-Segment::Segment(const Point &first, const Point &second) : Shape({first, second}) {}
+Segment::Segment(const Point &first, const Point &second) : Shape({first, second}) {
+  if (first == second) {
+    throw std::logic_error("Cannot make a segment from the same two points");
+  }
+}
 
 std::optional<const Point> Segment::intersect(const Segment &other) const {
   int local_delta_y = vertices[1].y - vertices[0].y;
