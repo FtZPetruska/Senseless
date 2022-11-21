@@ -22,11 +22,14 @@ const std::vector<Point> &Shape::getVertices(void) const {
 }
 
 CollisionDirection Shape::wouldShapeCollideAfterMovement(const Shape &moving_shape, const Vec2 &movement) const {
-  return Rectangle::narrowShapeToRectangle(*this).wouldShapeCollideAfterMovement(moving_shape, movement);
+  const Rectangle NARROWED_SHAPE{Rectangle::narrowShapeToRectangle(*this)};
+  return NARROWED_SHAPE.wouldShapeCollideAfterMovement(moving_shape, movement);
 }
 
 bool Shape::operator==(const Shape &other) const {
-  return getNormalisedVertices() == other.getNormalisedVertices();
+  const auto &local_normalised_vertices = getNormalisedVertices();
+  const auto &other_normalised_vertices = other.getNormalisedVertices();
+  return local_normalised_vertices == other_normalised_vertices;
 }
 
 std::vector<Point> Shape::getNormalisedVertices(void) const {
