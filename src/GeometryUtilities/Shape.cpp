@@ -1,9 +1,12 @@
 #include "GeometryUtilities.hpp"
 
+#include <cmath>
 #include <stdexcept>
 #include <string>
 
 using namespace GameLib;
+
+static bool shouldSkipMoving(const Vec2 &translation);
 
 Shape::Shape(const std::vector<Point> &shape_vertices) : vertices(shape_vertices) {
   static constexpr std::size_t MIN_VERTICES_COUNT{2};
@@ -40,7 +43,16 @@ std::vector<Point> Shape::getNormalisedVertices(void) const {
 }
 
 void Shape::move(const Vec2 &translation) {
+  if (shouldSkipMoving(translation)) {
+    return;
+  }
+
   for (auto &point : vertices) {
     point = point.translate(translation);
   }
+}
+
+static bool shouldSkipMoving(const Vec2 &translation) {
+  static constexpr double MINIMUM_MOVEMENT{0.5}; /**< Minimum displacement for the movement to be visible */
+  return std::abs(translation.dx) < MINIMUM_MOVEMENT && std::abs(translation.dy) < MINIMUM_MOVEMENT;
 }
