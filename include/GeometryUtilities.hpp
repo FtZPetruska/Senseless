@@ -9,8 +9,19 @@ namespace GameLib {
  * @brief Simple 2D cartesian Vector
  */
 struct Vec2 {
+  /**
+   * @brief Add each components
+   */
   Vec2 operator+(const Vec2 &other) const;
+
+  /**
+   * @brief Substract each components
+   */
   Vec2 operator-(const Vec2 &other) const;
+
+  /**
+   * @brief Check that each component are equal
+   */
   bool operator==(const Vec2 &other) const;
 
   /**
@@ -27,9 +38,12 @@ struct Vec2 {
 /**
  * @brief Simple 2D point in a cartesian plane
  *
- * @Note The Y axis is inverted (increases by going down)
+ * @note The Y axis is inverted (increases by going down)
  */
 struct Point {
+  /**
+   * @brief Compares two points
+   */
   bool operator==(const Point &other) const;
 
   /**
@@ -78,6 +92,11 @@ enum class CollisionDirection {
  */
 class Shape {
 public:
+  /**
+   * @brief Create an arbitrary shape from the vertices
+   *
+   * @pre vertices should be of size two or more
+   */
   Shape(const std::vector<Point> &vertices);
   virtual ~Shape();
 
@@ -89,39 +108,76 @@ public:
   const std::vector<Point> &getVertices(void) const;
 
   /**
-   * @brief Test if the given position is contained within the shape
+   * @brief Get the normalised representation of the vertices
    *
-   * @param position The position to test
+   * @return The vertices uniformly translated so the first point is (0,0)
+   */
+  std::vector<Point> getNormalisedVertices(void) const;
+
+  /**
+   * @brief Check if a moving shape would collide with the current object
+   *
+   * @param moving_shape The shape moving
+   * @param movement The vector describing the shape's movement
    * @return The type of collision that occured
    */
-  virtual CollisionDirection contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) const;
+  virtual CollisionDirection wouldShapeCollideAfterMovement(const Shape &moving_shape, const Vec2 &movement) const;
 
-protected:
-  Shape();
+  /**
+   * @brief Verify if two shapes are the same once normalised
+   */
+  bool operator==(const Shape &other) const;
 
+  /**
+   * @brief Move a shape by a translation vector
+   */
+  void move(const Vec2 &translation);
+
+private:
   /**
    * @brief Buffer of the points defining the shape
    */
   std::vector<Point> vertices{};
 };
 
+/**
+ * @brief Specialisation of a Shape with only four distinct vertices in a rectangle shape
+ */
 class Rectangle : public Shape {
 public:
   /**
    * @brief Construct a rectangle from the top-left vertex.
    *
-   * @param origin, top left vertex of the rectangle
-   * @param width, width of the rectangle
-   * @param height, height of the rectangle
+   * @param origin top left vertex of the rectangle
+   * @param width width of the rectangle
+   * @param height height of the rectangle
    *
    * @note The vertices are computed clock-wise
    */
   Rectangle(const Point &origin, int width, int height);
 
-  CollisionDirection contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) const override;
+  CollisionDirection wouldShapeCollideAfterMovement(const Shape &moving_shape, const Vec2 &movement) const override;
+
+  /**
+   * @brief Reduce a shape to a Rectangle
+   *
+   * @param shape Arbitrary shape
+   * @return A rectangle shape based on the min/max positions of vertices
+   *
+   * @pre The shape should have three vertices, a std::logic_error is thrown otherwise
+   */
+  static Rectangle narrowShapeToRectangle(const Shape &shape);
 };
 
+/**
+ * @brief Specialisation of a Shape made of only two distinct points.
+ */
 struct Segment : public Shape {
+  /**
+   * @brief Create a segment from two points
+   *
+   * @pre first and second must compare not equal, a std::logic_error is thrown otherwise
+   */
   Segment(const Point &first, const Point &second);
 
   /**

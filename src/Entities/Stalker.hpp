@@ -6,8 +6,14 @@
 
 namespace GameLib {
 
+/**
+ * @brief Specialisation of Entity that follows the path taken by the player
+ */
 class Stalker : public Entity {
 public:
+  /**
+   * @brief Create a Stalker with a given position and shape
+   */
   Stalker(const Point &starting_position, const Shape &shape);
 
   void updateAcceleration(void) override;

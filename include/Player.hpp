@@ -13,6 +13,9 @@ namespace GameLib {
  */
 class Player : public Entity {
 public:
+  /**
+   * @brief Create the Player with a given position and shape
+   */
   Player(const Point &starting_position, const Shape &shape);
 
   void updateAcceleration(void) override;

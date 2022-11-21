@@ -5,8 +5,14 @@
 
 namespace GameLib {
 
+/**
+ * @brief Specialisation of Entity that charges towards the last position the player used its sonar at
+ */
 class Luis : public Entity {
 public:
+  /**
+   * @brief Create a Luis with a given position and shape
+   */
   Luis(const Point &starting_position, const Shape &shape);
 
   void updateAcceleration(void) override;

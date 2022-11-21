@@ -11,13 +11,15 @@ Segment::Segment(const Point &first, const Point &second) : Shape({first, second
 }
 
 std::optional<const Point> Segment::intersect(const Segment &other) const {
-  int local_delta_y = vertices[1].y - vertices[0].y;
-  int local_delta_x = vertices[0].x - vertices[1].x;
-  int local_coefficient = local_delta_y * vertices[0].x + local_delta_x * vertices[0].y;
+  const auto &local_vertices = getVertices();
+  int local_delta_y = local_vertices[1].y - local_vertices[0].y;
+  int local_delta_x = local_vertices[0].x - local_vertices[1].x;
+  int local_coefficient = local_delta_y * local_vertices[0].x + local_delta_x * local_vertices[0].y;
 
-  int other_delta_y = other.vertices[1].y - other.vertices[0].y;
-  int other_delta_x = other.vertices[0].x - other.vertices[1].x;
-  int other_coefficient = other_delta_y * other.vertices[0].x + other_delta_x * other.vertices[0].y;
+  const auto &other_vertices = other.getVertices();
+  int other_delta_y = other_vertices[1].y - other_vertices[0].y;
+  int other_delta_x = other_vertices[0].x - other_vertices[1].x;
+  int other_coefficient = other_delta_y * other_vertices[0].x + other_delta_x * other_vertices[0].y;
 
   int determinant = local_delta_y * other_delta_x - other_delta_y * local_delta_x;
 
@@ -35,7 +37,9 @@ std::optional<const Point> Segment::intersect(const Segment &other) const {
 }
 
 bool Segment::isOnSegment(const Point &candidate) const {
-  return candidate.x <= std::max(vertices[0].x, vertices[1].x) &&
-         candidate.x >= std::min(vertices[0].x, vertices[1].x) &&
-         candidate.y <= std::max(vertices[0].y, vertices[1].y) && candidate.y >= std::min(vertices[0].y, vertices[1].y);
+  const auto &local_vertices = getVertices();
+  return candidate.x <= std::max(local_vertices[0].x, local_vertices[1].x) &&
+         candidate.x >= std::min(local_vertices[0].x, local_vertices[1].x) &&
+         candidate.y <= std::max(local_vertices[0].y, local_vertices[1].y) &&
+         candidate.y >= std::min(local_vertices[0].y, local_vertices[1].y);
 }

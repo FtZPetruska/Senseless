@@ -4,8 +4,14 @@
 
 namespace GameLib {
 
+/**
+ * @brief Specialisation of Entity that blocks the player's path with a price to pass
+ */
 class Doorman : public Entity {
 public:
+  /**
+   * @brief Create a Doorman with a given position and shape
+   */
   Doorman(const Point &starting_position, const Shape &shape);
 
   void updateAcceleration(void) override;

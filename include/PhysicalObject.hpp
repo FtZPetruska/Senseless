@@ -9,7 +9,10 @@ namespace GameLib {
  */
 class PhysicalObject {
 public:
-  PhysicalObject(const Point& starting_position, const Shape& shape);
+  /**
+   * @brief Create an object with a given position and shape
+   */
+  PhysicalObject(const Point &starting_position, const Shape &shape);
 
   /**
    * @brief Get the position of the object
@@ -21,10 +24,9 @@ public:
   /**
    * @brief Set the position of the object
    *
-   * @param position The position of the object
+   * @param new_position The position of the object
    */
   void setCurrentPosition(const Point &new_position);
-
 
 private:
   Point current_position;                /**< The position of the object*/

@@ -218,12 +218,13 @@ TEST_CASE("Rectangle collision with below", "[Rectangle]") {
 
   SECTION("Collision with a Rectangle below") {
     const Vec2 COLLISION_VECTOR{0, -150};
-    REQUIRE(TEST_RECT.contains(BELOW_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::DOWN);
+    REQUIRE(TEST_RECT.wouldShapeCollideAfterMovement(BELOW_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::DOWN);
   }
 
   SECTION("Collision with a Rectangle below") {
     const Vec2 NO_COLLISION_VECTOR{100, 0};
-    REQUIRE(TEST_RECT.contains(BELOW_RECTANGLE, NO_COLLISION_VECTOR) == CollisionDirection::NO_COLLISION);
+    REQUIRE(TEST_RECT.wouldShapeCollideAfterMovement(BELOW_RECTANGLE, NO_COLLISION_VECTOR) ==
+            CollisionDirection::NO_COLLISION);
   }
 }
 
@@ -233,12 +234,13 @@ TEST_CASE("Rectangle collision with above", "[Rectangle]") {
 
   SECTION("Collision with a Rectangle above") {
     const Vec2 COLLISION_VECTOR{0, 150};
-    REQUIRE(TEST_RECT.contains(ABOVE_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::UP);
+    REQUIRE(TEST_RECT.wouldShapeCollideAfterMovement(ABOVE_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::UP);
   }
 
   SECTION("Collision with a Rectangle above") {
     const Vec2 NO_COLLISION_VECTOR{100, 0};
-    REQUIRE(TEST_RECT.contains(ABOVE_RECTANGLE, NO_COLLISION_VECTOR) == CollisionDirection::NO_COLLISION);
+    REQUIRE(TEST_RECT.wouldShapeCollideAfterMovement(ABOVE_RECTANGLE, NO_COLLISION_VECTOR) ==
+            CollisionDirection::NO_COLLISION);
   }
 }
 
@@ -248,12 +250,13 @@ TEST_CASE("Rectangle collision with left", "[Rectangle]") {
 
   SECTION("Collision with a Rectangle to the left") {
     const Vec2 COLLISION_VECTOR{150, 0};
-    REQUIRE(TEST_RECT.contains(LEFT_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::LEFT);
+    REQUIRE(TEST_RECT.wouldShapeCollideAfterMovement(LEFT_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::LEFT);
   }
 
   SECTION("Collision with a Rectangle to the left") {
     const Vec2 NO_COLLISION_VECTOR{0, 100};
-    REQUIRE(TEST_RECT.contains(LEFT_RECTANGLE, NO_COLLISION_VECTOR) == CollisionDirection::NO_COLLISION);
+    REQUIRE(TEST_RECT.wouldShapeCollideAfterMovement(LEFT_RECTANGLE, NO_COLLISION_VECTOR) ==
+            CollisionDirection::NO_COLLISION);
   }
 }
 
@@ -263,12 +266,13 @@ TEST_CASE("Rectangle collision with right", "[Rectangle]") {
 
   SECTION("Collision with a Rectangle to the right") {
     const Vec2 COLLISION_VECTOR{-150, 0};
-    REQUIRE(TEST_RECT.contains(RIGHT_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::RIGHT);
+    REQUIRE(TEST_RECT.wouldShapeCollideAfterMovement(RIGHT_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::RIGHT);
   }
 
   SECTION("Collision with a Rectangle to the right") {
     const Vec2 NO_COLLISION_VECTOR{0, -100};
-    REQUIRE(TEST_RECT.contains(RIGHT_RECTANGLE, NO_COLLISION_VECTOR) == CollisionDirection::NO_COLLISION);
+    REQUIRE(TEST_RECT.wouldShapeCollideAfterMovement(RIGHT_RECTANGLE, NO_COLLISION_VECTOR) ==
+            CollisionDirection::NO_COLLISION);
   }
 }
 
@@ -278,7 +282,8 @@ TEST_CASE("Rectangle collision with right in diagonal", "[Rectangle]") {
 
   SECTION("Collision with a Rectangle to the left") {
     const Vec2 COLLISION_VECTOR{-100, -50};
-    REQUIRE(TEST_RECT.contains(RIGHT_DIAGONAL_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::RIGHT);
+    REQUIRE(TEST_RECT.wouldShapeCollideAfterMovement(RIGHT_DIAGONAL_RECTANGLE, COLLISION_VECTOR) ==
+            CollisionDirection::RIGHT);
   }
 }
 
@@ -288,7 +293,8 @@ TEST_CASE("Rectangle collision with left in diagonal", "[Rectangle]") {
 
   SECTION("Collision with a Rectangle to the left") {
     const Vec2 COLLISION_VECTOR{100, -50};
-    REQUIRE(TEST_RECT.contains(LEFT_DIAGONAL_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::LEFT);
+    REQUIRE(TEST_RECT.wouldShapeCollideAfterMovement(LEFT_DIAGONAL_RECTANGLE, COLLISION_VECTOR) ==
+            CollisionDirection::LEFT);
   }
 }
 
@@ -298,8 +304,15 @@ TEST_CASE("Rectangle collision with left in tricky diagonal (the vector cross tw
 
   SECTION("Collision with a Rectangle to the left") {
     const Vec2 COLLISION_VECTOR{200, -100};
-    REQUIRE(TEST_RECT.contains(LEFT_DIAGONAL_RECTANGLE, COLLISION_VECTOR) == CollisionDirection::LEFT);
+    REQUIRE(TEST_RECT.wouldShapeCollideAfterMovement(LEFT_DIAGONAL_RECTANGLE, COLLISION_VECTOR) ==
+            CollisionDirection::LEFT);
   }
+}
+
+TEST_CASE("Narrowing a Rectangle to a Rectangle") {
+  const Rectangle START_RECTANGLE{{0, 0}, 50, 50};
+  const Rectangle NARROWED_RECTANGLE = Rectangle::narrowShapeToRectangle(START_RECTANGLE);
+  REQUIRE(START_RECTANGLE == NARROWED_RECTANGLE);
 }
 
 TEST_CASE("Segment sanity checks", "[Segment]") {

@@ -9,6 +9,9 @@ namespace GameLib {
  */
 class Entity : public PhysicalObject {
 public:
+  /**
+   * @brief Create the Entity with a given position and shape
+   */
   Entity(const Point &starting_position, const Shape &shape);
   virtual ~Entity();
 
@@ -40,7 +43,7 @@ public:
   /**
    * @brief Check if the current entity would collide, update its acceleration vector if needed.
    *
-   * @param position The physical object to test
+   * @param other The physical object to test
    */
   virtual void checkForCollision(const PhysicalObject &other) = 0;
 

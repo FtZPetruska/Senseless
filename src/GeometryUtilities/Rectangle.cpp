@@ -2,6 +2,7 @@
 
 #include <limits>
 #include <stdexcept>
+#include <string>
 
 using namespace GameLib;
 
@@ -13,14 +14,16 @@ Rectangle::Rectangle(const Point &origin, int width, int height)
              {origin.x + width, origin.y + height},
              {origin.x, origin.y + height}}) {}
 
-CollisionDirection Rectangle::contains(const std::vector<Point> &other_vertices, const Vec2 &acceleration) const {
+CollisionDirection Rectangle::wouldShapeCollideAfterMovement(const Shape &moving_shape, const Vec2 &movement) const {
   CollisionDirection closest_collision_direction = CollisionDirection::NO_COLLISION;
   double closest_distance_from_collision = std::numeric_limits<double>::max();
-  for (const auto &vertex : other_vertices) {
-    Point translated_vertex = vertex.translate(acceleration);
+  const Rectangle NARROWED_SHAPE = narrowShapeToRectangle(moving_shape);
+  const auto &local_vertices = getVertices();
+  for (const auto &vertex : NARROWED_SHAPE.getVertices()) {
+    Point translated_vertex = vertex.translate(movement);
     Segment movement_trace(vertex, translated_vertex);
-    for (std::size_t vertex_index = 0; vertex_index < vertices.size(); vertex_index++) {
-      Segment edge(vertices[vertex_index], vertices[(vertex_index + 1) % vertices.size()]);
+    for (std::size_t vertex_index = 0; vertex_index < local_vertices.size(); vertex_index++) {
+      Segment edge(local_vertices[vertex_index], local_vertices[(vertex_index + 1) % local_vertices.size()]);
       std::optional<Point> intersection = movement_trace.intersect(edge);
       if (intersection.has_value()) {
         CollisionDirection current_collision_direction = vertexIndexToColisionDirection(vertex_index);
@@ -50,7 +53,28 @@ static CollisionDirection vertexIndexToColisionDirection(std::size_t vertex_inde
     return CollisionDirection::LEFT;
     break;
   default:
-    throw std::out_of_range("There cannot be more than 4 vertices in a rectangle");
+    throw std::out_of_range("There cannot be more than 4 local_vertices in a rectangle");
     break;
   }
+}
+
+Rectangle Rectangle::narrowShapeToRectangle(const Shape &shape) {
+  static constexpr std::size_t MIN_VERTICES_COUNT{3};
+  if (shape.getVertices().size() < MIN_VERTICES_COUNT) {
+    static const std::string ERROR_MESSAGE =
+        "Cannot reduce a shape made from less than " + std::to_string(MIN_VERTICES_COUNT) + " local_vertices";
+    throw std::logic_error(ERROR_MESSAGE);
+  }
+
+  Point origin{std::numeric_limits<int>::max(), std::numeric_limits<int>::max()};
+  int max_x = std::numeric_limits<int>::min();
+  int max_y = std::numeric_limits<int>::min();
+
+  for (const auto &vertex : shape.getVertices()) {
+    origin.x = std::min(origin.x, vertex.x);
+    origin.y = std::min(origin.y, vertex.y);
+    max_x = std::max(max_x, vertex.x);
+    max_y = std::max(max_y, vertex.y);
+  }
+  return Rectangle(origin, max_x - origin.x, max_y - origin.y);
 }

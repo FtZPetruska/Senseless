@@ -4,8 +4,14 @@
 
 namespace GameLib {
 
+/**
+ * @brief Specialisation of Entity that moves horizontally and changes direction when hitting obstacles
+ */
 class Vagrant : public Entity {
 public:
+  /**
+   * @brief Create a Vagrant with a given position and shape
+   */
   Vagrant(const Point &starting_position, const Shape &shape);
 
   void updateAcceleration(void) override;
