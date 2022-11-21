@@ -134,10 +134,7 @@ public:
   void move(const Vec2 &translation);
 
 private:
-  /**
-   * @brief Buffer of the points defining the shape
-   */
-  std::vector<Point> vertices{};
+  std::vector<Point> vertices{}; /**< Buffer of the points defining the shape */
 };
 
 /**
