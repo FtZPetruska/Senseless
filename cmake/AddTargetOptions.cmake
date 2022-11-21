@@ -42,20 +42,21 @@ function(set_target_options _TARGET)
     set_target_properties(${_TARGET} PROPERTIES C_COMPILER_LAUNCHER ${CCACHE} CXX_COMPILER_LAUNCHER ${CCACHE})
   endif()
 
-  if(SL_ENABLE_CLANG_TIDY AND CLANG_TIDY)
-    set_target_properties(${_TARGET} PROPERTIES C_CLANG_TIDY ${CLANG_TIDY} CXX_CLANG_TIDY ${CLANG_TIDY})
+  if(SL_ENABLE_CLANG_TIDY AND CLANG_TIDY_EXECUTABLE)
+    set_target_properties(${_TARGET} PROPERTIES C_CLANG_TIDY ${CLANG_TIDY_EXECUTABLE} CXX_CLANG_TIDY ${CLANG_TIDY_EXECUTABLE})
   endif()
 
-  if(SL_ENABLE_CLANG_FORMAT AND CLANG_FORMAT)
+  if(SL_ENABLE_CLANG_FORMAT AND CLANG_FORMAT_EXECUTABLE)
     get_target_property(SOURCES ${_TARGET} SOURCES)
     list(TRANSFORM SOURCES PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
     add_custom_command(
       TARGET ${_TARGET}
       PRE_BUILD
-      COMMAND ${CLANG_FORMAT} ARGS "--Werror" "--dry-run" "--verbose" ${SOURCES})
+      COMMAND ${CLANG_FORMAT_EXECUTABLE} ARGS "--Werror" "--dry-run" "--verbose" ${SOURCES})
   endif()
 
-  if(SL_ENABLE_IWYU AND IWYU)
-    set_target_properties(${_TARGET} PROPERTIES C_INCLUDE_WHAT_YOU_USE ${IWYU} CXX_INCLUDE_WHAT_YOU_USE ${IWYU})
+  if(SL_ENABLE_IWYU AND IWYU_EXECUTABLE)
+    set_target_properties(${_TARGET} PROPERTIES C_INCLUDE_WHAT_YOU_USE ${IWYU_EXECUTABLE} CXX_INCLUDE_WHAT_YOU_USE
+                                                                                          ${IWYU_EXECUTABLE})
   endif()
 endfunction(set_target_options)
