@@ -150,6 +150,8 @@ public:
    * @param height height of the rectangle
    *
    * @note The vertices are computed clock-wise
+   *
+   * @pre width and heigh must be different from 0, they may be negative, a std::logic_error is thrown otherwise
    */
   Rectangle(const Point &origin, int width, int height);
 

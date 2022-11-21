@@ -12,7 +12,14 @@ Rectangle::Rectangle(const Point &origin, int width, int height)
     : Shape({{origin},
              {origin.x + width, origin.y},
              {origin.x + width, origin.y + height},
-             {origin.x, origin.y + height}}) {}
+             {origin.x, origin.y + height}}) {
+  if (width == 0) {
+    throw std::logic_error("Cannot construct a Rectangle with width 0");
+  }
+  if (height == 0) {
+    throw std::logic_error("Cannot construct a Rectangle with width 0");
+  }
+}
 
 CollisionDirection Rectangle::wouldShapeCollideAfterMovement(const Shape &moving_shape, const Vec2 &movement) const {
   CollisionDirection closest_collision_direction = CollisionDirection::NO_COLLISION;
