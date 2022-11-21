@@ -95,7 +95,7 @@ public:
   /**
    * @brief Create an arbitrary shape from the vertices
    *
-   * @pre vertices should be of size two or more
+   * @pre vertices should be of size two or more, a std::logic_error is thrown otherwise
    */
   Shape(const std::vector<Point> &vertices);
   virtual ~Shape();

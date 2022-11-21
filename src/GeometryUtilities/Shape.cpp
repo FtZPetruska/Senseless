@@ -1,8 +1,18 @@
 #include "GeometryUtilities.hpp"
 
+#include <stdexcept>
+#include <string>
+
 using namespace GameLib;
 
-Shape::Shape(const std::vector<Point> &shape_vertices) : vertices(shape_vertices) {}
+Shape::Shape(const std::vector<Point> &shape_vertices) : vertices(shape_vertices) {
+  static constexpr std::size_t MIN_VERTICES_COUNT{2};
+  if (vertices.size() < MIN_VERTICES_COUNT) {
+    static const std::string ERROR_MESSAGE =
+        "You cannot create a Shape with less than " + std::to_string(MIN_VERTICES_COUNT) + " vertices";
+    throw std::logic_error(ERROR_MESSAGE);
+  }
+}
 
 Shape::~Shape() {}
 
