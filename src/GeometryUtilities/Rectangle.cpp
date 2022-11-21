@@ -1,5 +1,6 @@
 #include "GeometryUtilities.hpp"
 
+#include <array>
 #include <limits>
 #include <stdexcept>
 #include <string>
@@ -46,23 +47,9 @@ CollisionDirection Rectangle::wouldShapeCollideAfterMovement(const Shape &moving
 }
 
 static CollisionDirection vertexIndexToColisionDirection(std::size_t vertex_index) {
-  switch (vertex_index) {
-  case 0:
-    return CollisionDirection::UP;
-    break;
-  case 1:
-    return CollisionDirection::RIGHT;
-    break;
-  case 2:
-    return CollisionDirection::DOWN;
-    break;
-  case 3:
-    return CollisionDirection::LEFT;
-    break;
-  default:
-    throw std::out_of_range("There cannot be more than 4 local_vertices in a rectangle");
-    break;
-  }
+  static constexpr std::array<CollisionDirection, 4> INDEX_TO_COLLISION_TYPE{
+      CollisionDirection::UP, CollisionDirection::RIGHT, CollisionDirection::DOWN, CollisionDirection::LEFT};
+  return INDEX_TO_COLLISION_TYPE.at(vertex_index);
 }
 
 Rectangle Rectangle::narrowShapeToRectangle(const Shape &shape) {
