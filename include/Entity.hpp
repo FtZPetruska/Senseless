@@ -13,7 +13,7 @@ public:
    * @brief Create the Entity with a given position and shape
    */
   Entity(const Point &starting_position, const Shape &shape);
-  virtual ~Entity();
+  virtual ~Entity() = default;
 
   /**
    * @brief Set the acceleration vector

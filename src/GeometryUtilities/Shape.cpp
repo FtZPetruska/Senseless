@@ -17,8 +17,6 @@ Shape::Shape(const std::vector<Point> &shape_vertices) : vertices(shape_vertices
   }
 }
 
-Shape::~Shape() {}
-
 const std::vector<Point> &Shape::getVertices(void) const {
   return vertices;
 }
